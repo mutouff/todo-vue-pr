@@ -29,5 +29,7 @@ export function validPassword(val){
 
 export default {
     validLoginName,
-    validPassword
+    validPassword,
+    validPhone,
+    validEmail
 }

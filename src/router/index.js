@@ -22,6 +22,14 @@ const routes = [
         }
     },
     {
+        path: '/process',
+        name: 'process',
+        component: ()=>import('@/views/process.vue'),
+        meta: {
+            title: '测试'
+        }
+    },
+    {
         path: '*',//匹配所有路径
         redirect: '/'
     }
