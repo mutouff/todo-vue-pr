@@ -39,7 +39,7 @@
 
 <script>
   import { validLoginName, validPassword, validPhone, validEmail } from "@/utils/valid"
-  import {} from "@/api/login"
+  import { login } from "@/api/login"
   export default {
     computed: {
     },
@@ -47,7 +47,8 @@
       return {
         type: '',
         form: {
-
+          userLogin: "",
+          password: ""
         },
         loading: false
       }
@@ -56,7 +57,7 @@
       getLoginType(type = 'signin') {
         this.type = type
       },
-      handleSignIn() {
+      async handleSignIn() {
         if(validLoginName(this.form.userLogin)){
           this.$message.warning("请检查用户名或账号格式！")
           return false
@@ -72,9 +73,20 @@
         }
         this.loading = true
         console.log(this.form)
-        
-
-
+        try {
+          let res = await login(this.form)
+          this.loading = false
+          if(res.code == 200){
+            this.clearInput();
+            this.$message.success("登录成功！")
+            this.$store.dispath('userInfo/saveInfo',res.data)
+            this.$router.push('./home')
+          }else{
+            this.$message.error(msg)
+          }
+        } catch (error) {
+          this.loading = false
+        }
       },
       handleSignUp() {
 
@@ -90,6 +102,12 @@
       },
       clearCookie(){
         this.setCookie('','',-1)
+      },
+      clearInput(){
+        this.form = {
+          userLogin: "",
+          password: ""
+        }
       },
     },
     created() {
